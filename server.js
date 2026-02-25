@@ -2,35 +2,23 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import admin from 'firebase-admin';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Initialize Firebase Admin
 let serviceAccount;
 
-// Try to load from environment variable first (for Railway)
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  try {
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    console.log('✅ Loaded Firebase credentials from environment variable');
-  } catch (error) {
-    console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT:', error.message);
-    process.exit(1);
-  }
-} else {
-  // Fallback to local file for development
-  try {
-    const serviceAccountPath = join(__dirname, 'firebase-service-account.json');
-    serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
-    console.log('✅ Loaded Firebase credentials from local file');
-  } catch (error) {
-    console.error('❌ Failed to load Firebase credentials:', error.message);
-    process.exit(1);
-  }
+// Load from environment variable
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+  console.error('❌ FIREBASE_SERVICE_ACCOUNT environment variable is not set');
+  console.error('Please add it to your .env file or Railway environment variables');
+  process.exit(1);
+}
+
+try {
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  console.log('✅ Loaded Firebase credentials from environment variable');
+} catch (error) {
+  console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT:', error.message);
+  process.exit(1);
 }
 
 admin.initializeApp({
