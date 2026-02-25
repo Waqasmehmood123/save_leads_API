@@ -29,5 +29,5 @@ dist-ssr
 .env.production
 
 # Firebase service account (keep this secret!)
-*-firebase-adminsdk-*.json
-firebase-service-account.json
+*firebase-adminsdk*.json
+package-lock.json

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import admin from 'firebase-admin';
@@ -23,7 +24,7 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT) {
 } else {
   // Fallback to local file for development
   try {
-    const serviceAccountPath = join(__dirname, 'suredeal-69c36-firebase-adminsdk-fbsvc-39420527e4.json');
+    const serviceAccountPath = join(__dirname, 'firebase-service-account.json');
     serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
     console.log('✅ Loaded Firebase credentials from local file');
   } catch (error) {
